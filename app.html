@@ -19,11 +19,14 @@
         <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
     </head>
     <body>
+        <!--
+            file:///C:/github/clockpicker/app.html
+        -->
         <div class="container-fluid">
             <div class="jumbotron text-center">
                 <h1>Mari's Clock Helper</h1>
                 <p>It calculates time! Yes it does!</p>
-                <p id="result">Calculation result: <span id="time"></span></p>
+                <p id="result" style="display:none;">Calculation result: <span id="time"></span></p>
             </div>
      
             <div class="row">
@@ -110,6 +113,8 @@
                 );
 
                 $("#time").html(timeDifferenceString);
+
+                if ($("#result").visible() !== true) $("#result").show();
 
                 // if (min2 < min1) min2 = min2+60*24;
 
