@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <title>Mari's clock helper</title>
+
+        <!-- Bootstrap stylesheet -->
+        <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+        <!-- ClockPicker Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
+    </head>
+    <body>
+
+<div class="jumbotron text-center">
+  <h1>Mari's Clock Helper</h1>
+  <p>Resize this responsive page to see the effect!</p> 
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Start time</h3>
+        <!-- Input group, just add class 'clockpicker', and optional data-*  ||  data-placement="right"  -->
+        <div class="input-group clockpicker" data-align="bottom" data-autoclose="false">
+            <input type="text" class="form-control" value="09:32" id="time1">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-time"></span>
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+      <h3>End time</h3>
+      <!-- Or just a input -->
+      <input id="time2" />
+    </div>
+    <div class="col-sm-4">
+      <h3>Column 3</h3> 
+      <p>Lorem ipsum dolor..</p>
+      <p>Ut enim ad..</p>
+    </div>
+  </div>
+</div>
+
+
+
+        
+
+        <!-- jQuery and Bootstrap scripts -->
+        <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+
+        <!-- ClockPicker script -->
+        <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
+
+        <script type="text/javascript">
+        $('.clockpicker').clockpicker({
+            autoclose: false
+        }).find('input').change(function(){
+            refreshTime()
+        });
+
+        $('#time2').clockpicker({
+            autoclose: false
+        });
+
+        //if (something) {
+            // Manual operations (after clockpicker is initialized).
+            $('#time2').clockpicker('show'); // Or hide, remove ...
+                    // .clockpicker('toggleView', 'minutes');
+        //}
+
+        function refreshTime() {
+            recalculateTime($("#time1").first(),$("#time2").first());
+        }
+
+        function recalculateTime(input1, input2){
+            var v1 = input1.val();
+            var v2 = input2.val();
+
+            // console.log(v2);
+
+            // console.log(v2-v1);
+
+            var min1 = parseMinutes(v1);
+            var min2 = parseMinutes(v2);
+
+            console.log(min2-min1);
+        }
+
+        function parseMinutes(v1) {
+            return parseInt(parseInt(v1.split(":")[0])*60) + parseInt(v1.split(":")[1]);
+        }
+
+        </script>
+    </body>
+</html>
