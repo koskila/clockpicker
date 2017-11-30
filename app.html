@@ -1,5 +1,8 @@
-<html>
+<html lang="en">
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>Mari's clock helper</title>
 
         <!-- Bootstrap stylesheet -->
@@ -7,42 +10,6 @@
 
         <!-- ClockPicker Stylesheet -->
         <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
-    </head>
-    <body>
-
-<div class="jumbotron text-center">
-  <h1>Mari's Clock Helper</h1>
-  <p>Resize this responsive page to see the effect!</p> 
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Start time</h3>
-        <!-- Input group, just add class 'clockpicker', and optional data-*  ||  data-placement="right"  -->
-        <div class="input-group clockpicker" data-align="bottom" data-autoclose="false">
-            <input type="text" class="form-control" value="09:32" id="time1">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-time"></span>
-            </span>
-        </div>
-    </div>
-    <div class="col-sm-4">
-      <h3>End time</h3>
-      <!-- Or just a input -->
-      <input id="time2" />
-    </div>
-    <div class="col-sm-4">
-      <h3>Column 3</h3> 
-      <p>Lorem ipsum dolor..</p>
-      <p>Ut enim ad..</p>
-    </div>
-  </div>
-</div>
-
-
-
-        
 
         <!-- jQuery and Bootstrap scripts -->
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
@@ -50,45 +17,138 @@
 
         <!-- ClockPicker script -->
         <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="jumbotron text-center">
+                <h1>Mari's Clock Helper</h1>
+                <p>It calculates time! Yes it does!</p>
+                <p id="result">Calculation result: <span id="time"></span></p>
+            </div>
+     
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Start time</h3>
+                    <!-- Input group, just add class 'clockpicker', and optional data-*  ||  data-placement="right"  -->
+                    <div class="input-group clockpicker" data-align="bottom" data-autoclose="false" data-donetext="OK!">
+                        <input type="text" id="time1" class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>End time</h3>
+                    <div class="input-group clockpicker" data-donetext="OK!">
+                        <input id="time2" class="form-control" value="" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-4">
+                    <h3>Column 3</h3> 
+                    <p>Lorem ipsum dolor..</p>
+                    <p>Ut enim ad..</p>
+                </div> -->
+            </div>
+            
+        </div>
 
         <script type="text/javascript">
-        $('.clockpicker').clockpicker({
-            autoclose: false
-        }).find('input').change(function(){
-            refreshTime()
-        });
 
-        $('#time2').clockpicker({
-            autoclose: false
-        });
+            $(document).ready(function(){
+                // set initial time values
+                var timeNow = getRightTimeFormat(new Date());
+                
+                var time3HoursLater = getRightTimeFormat(new Date((new Date()).getTime()+1000*60*60*3));
 
-        //if (something) {
-            // Manual operations (after clockpicker is initialized).
-            $('#time2').clockpicker('show'); // Or hide, remove ...
-                    // .clockpicker('toggleView', 'minutes');
-        //}
+                $("#time1").val(timeNow);
+                $("#time2").val(time3HoursLater);
+            });
 
-        function refreshTime() {
-            recalculateTime($("#time1").first(),$("#time2").first());
-        }
 
-        function recalculateTime(input1, input2){
-            var v1 = input1.val();
-            var v2 = input2.val();
+            $('.clockpicker').clockpicker({
+                autoclose: false
+            }).find('input').change(function(){
+                refreshTime()
+            });
 
-            // console.log(v2);
+            // $('#time2').clockpicker('autoclose','false');
 
-            // console.log(v2-v1);
+            //if (something) {
+                // Manual operations (after clockpicker is initialized).
+                // $('#time2').clockpicker('show'); // Or hide, remove ...
+                        // .clockpicker('toggleView', 'minutes');
+            //}
 
-            var min1 = parseMinutes(v1);
-            var min2 = parseMinutes(v2);
+            function getRightTimeFormat(time) {
+                return  time.getHours() + ":" + time.getMinutes();
+            }
 
-            console.log(min2-min1);
-        }
+            function refreshTime() {
+                recalculateTime($("#time1").first(),$("#time2").first());
+            }
 
-        function parseMinutes(v1) {
-            return parseInt(parseInt(v1.split(":")[0])*60) + parseInt(v1.split(":")[1]);
-        }
+            function recalculateTime(input1, input2){
+                var v1 = input1.val();
+                var v2 = input2.val();
+
+                // console.log(v2);
+                // console.log(v2-v1);
+
+                var min1 = parseMinutes(v1);
+                var min2 = parseMinutes(v2);
+
+                var timeDifferenceString = timeDifferenceToString(
+                        new Date(millisecondsFromMinutes(min1)),
+                        new Date(millisecondsFromMinutes(min2))
+                    );
+
+                console.log(
+                    timeDifferenceString
+                );
+
+                $("#time").html(timeDifferenceString);
+
+                // if (min2 < min1) min2 = min2+60*24;
+
+                // var differenceInMinutes = min2-min1;
+
+                // var differenceInMilliseconds = differenceInMinutes*60*1000;
+
+                // var res = getRightTimeFormat(new Date(differenceInMilliseconds));
+
+                // console.log(res);
+            }
+
+            function millisecondsFromMinutes(minutes) {
+                return minutes*60*1000;
+            }
+
+            function timeDifferenceToString(v1, v2) {
+
+                var diff = v2.getTime() - v1.getTime();
+
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                diff -=  days * (1000 * 60 * 60 * 24);
+
+                var hours = Math.floor(diff / (1000 * 60 * 60));
+                diff -= hours * (1000 * 60 * 60);
+
+                var mins = Math.floor(diff / (1000 * 60));
+                diff -= mins * (1000 * 60);
+
+                var seconds = Math.floor(diff / (1000));
+                diff -= seconds * (1000);
+
+                // return days + " days, " + hours + " hours, " + mins + " minutes, " + seconds + " seconds";
+                return hours + ":" + mins;
+            }
+
+            function parseMinutes(v1) {
+                return parseInt(parseInt(v1.split(":")[0])*60) + parseInt(v1.split(":")[1]);
+            }
 
         </script>
     </body>
